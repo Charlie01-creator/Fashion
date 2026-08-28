@@ -17,6 +17,5 @@
     "prisma:generate": "npm run prisma:generate --workspace=backend",
     "prisma:migrate": "npm run prisma:migrate --workspace=backend",
     "prisma:deploy": "npm run prisma:deploy --workspace=backend",
-    "postinstall": "npm run build:shared"
   }
 }
