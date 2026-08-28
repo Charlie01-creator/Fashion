@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "npm run build --workspaces",
-    "prisma:deploy": "npx prisma db push --schema=backend/prisma/schema.prisma --accept-data-loss"
+    "prisma:deploy": "npx prisma db push --schema=backend/prisma/schema.prisma --accept-data-loss",
+    "start": "node --max-old-space-size=400 backend/dist/index.js"
   }
 }
