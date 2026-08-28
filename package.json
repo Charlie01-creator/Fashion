@@ -1,15 +1,22 @@
 {
   "name": "fashion-platform",
-  "version": "1.0.0",
   "private": true,
+  "version": "0.1.0",
   "workspaces": [
-    "backend",
     "frontend",
+    "backend",
     "shared"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
-    "prisma:deploy": "npx prisma db push --schema=backend/prisma/schema.prisma --accept-data-loss",
-    "start": "node --max-old-space-size=400 backend/dist/index.js"
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "build:shared": "npm run build --workspace=shared",
+    "build:backend": "npm run build --workspace=backend",
+    "build:frontend": "npm run build --workspace=frontend",
+    "build": "npm run build:shared && npm run build:backend && npm run build:frontend",
+    "prisma:generate": "npm run prisma:generate --workspace=backend",
+    "prisma:migrate": "npm run prisma:migrate --workspace=backend",
+    "prisma:deploy": "npm run prisma:deploy --workspace=backend",
+    "postinstall": "npm run build:shared"
   }
 }
