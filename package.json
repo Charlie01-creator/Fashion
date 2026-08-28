@@ -16,6 +16,6 @@
     "build": "npm run build:shared && npm run build:backend && npm run build:frontend",
     "prisma:generate": "npm run prisma:generate --workspace=backend",
     "prisma:migrate": "npm run prisma:migrate --workspace=backend",
-    "prisma:deploy": "npx prisma db push --schema=backend/prisma/schema.prisma --accept-data-loss"
+    "prisma:deploy": "npx prisma migrate resolve --applied 0_init --schema=backend/prisma/schema.prisma || npx prisma db push --schema=backend/prisma/schema.prisma --accept-data-loss"
   }
 }
