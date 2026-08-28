@@ -12,7 +12,6 @@
     "resolveJsonModule": true,
     "declaration": false,
     "sourceMap": true,
-    "baseUrl": ".",
     "paths": {
       "@fashion-platform/shared": ["../shared/src/index.ts"]
     }
