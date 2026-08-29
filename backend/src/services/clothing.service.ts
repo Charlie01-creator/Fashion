@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { prisma } from "../config/database";
 import { AppError } from "../utils/AppError";
 import { storageProvider } from "./storage";
@@ -164,7 +165,7 @@ export const clothingService = {
 
       const updated = await prisma.clothingItem.update({
         where: { id },
-        data: { aiStatus: "FAILED", aiMetadata: null, aiErrorMessage: userFacingMessage },
+        data: { aiStatus: "FAILED", aiMetadata: Prisma.JsonNull, aiErrorMessage: userFacingMessage },
       });
       return toDTO(updated);
     }

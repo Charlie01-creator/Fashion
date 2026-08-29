@@ -88,7 +88,9 @@ export class VisionProvider implements ClothingAnalyzer {
       throw new Error(`Vision provider returned HTTP ${response.status}`);
     }
 
-    const payload = await response.json();
+    const payload = (await response.json()) as {
+      choices?: { message?: { content?: string } }[];
+    };
     const rawContent = payload?.choices?.[0]?.message?.content;
     if (typeof rawContent !== "string") {
       throw new Error("Vision provider response missing expected content");

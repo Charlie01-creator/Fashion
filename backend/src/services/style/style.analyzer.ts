@@ -11,7 +11,7 @@ const PREFERRED_STYLE_BONUS = 3;
 const DISLIKED_STYLE_PENALTY = 3;
 const FAVORITE_COLOR_BONUS = 2;
 
-function effectiveStyle(item: { style: string | null; aiMetadata: { style: string } | null }): string {
+function effectiveStyle(item: { style: string | null; aiMetadata?: { style: string } | null }): string {
   return (item.aiMetadata?.style ?? item.style ?? "versatile").toLowerCase();
 }
 
