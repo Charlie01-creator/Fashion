@@ -62,10 +62,23 @@ const envSchema = z
     LOG_LEVEL: z.enum(["error", "warn", "info", "debug"]).default("info"),
 
     // --- Storage ---
-    STORAGE_DRIVER: z.enum(["local"]).default("local"), // add "s3" here once S3StorageProvider exists
+    STORAGE_DRIVER: z.enum(["local", "s3"]).default("local"),
     UPLOAD_DIR: z.string().default("uploads"),
     PUBLIC_UPLOAD_URL: z.string().default("http://localhost:4000/uploads"),
     MAX_UPLOAD_SIZE_MB: z.coerce.number().default(5),
+
+    // --- S3-compatible storage (required only when STORAGE_DRIVER=s3) ---
+    // Works with Cloudflare R2, AWS S3, Backblaze B2, or anything else that
+    // speaks the S3 API — only S3_ENDPOINT changes between providers.
+    S3_ENDPOINT: z.string().optional(),
+    S3_REGION: z.string().default("auto"),
+    S3_BUCKET: z.string().optional(),
+    S3_ACCESS_KEY_ID: z.string().optional(),
+    S3_SECRET_ACCESS_KEY: z.string().optional(),
+    // Public base URL for reading objects back (R2 public bucket URL, or a
+    // CDN/custom domain in front of the bucket). Distinct from S3_ENDPOINT,
+    // which is the API endpoint used for uploads/deletes, not for reading.
+    S3_PUBLIC_URL: z.string().optional(),
 
     // --- AI service ---
     AI_PROVIDER: z.enum(["mock", "openai_vision"]).default("mock"),
@@ -81,7 +94,17 @@ const envSchema = z
   .refine((data) => data.AI_PROVIDER !== "openai_vision" || !!data.OPENAI_API_KEY, {
     message: "OPENAI_API_KEY is required when AI_PROVIDER=openai_vision",
     path: ["OPENAI_API_KEY"],
-  });
+  })
+  .refine(
+    (data) =>
+      data.STORAGE_DRIVER !== "s3" ||
+      (!!data.S3_ENDPOINT && !!data.S3_BUCKET && !!data.S3_ACCESS_KEY_ID && !!data.S3_SECRET_ACCESS_KEY && !!data.S3_PUBLIC_URL),
+    {
+      message:
+        "S3_ENDPOINT, S3_BUCKET, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY, and S3_PUBLIC_URL are all required when STORAGE_DRIVER=s3",
+      path: ["STORAGE_DRIVER"],
+    }
+  );
 
 const parsed = envSchema.safeParse(process.env);
 
